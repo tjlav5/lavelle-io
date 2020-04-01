@@ -8,47 +8,54 @@ import {
   RouteProps,
   Redirect
 } from "react-router-dom";
+import { AuthProvider, useSession } from "./components/Auth/Auth";
 
 export const App: React.FC = () => {
+  const Login = React.lazy(() => import("./modules/Login/index"));
+
   return (
-    <Router>
-      <div>
-        <button />
+    <AuthProvider>
+      <Router>
+        <div>
+          <button />
 
-        <ul>
-          <li>
-            <Link to="/public">Public Page</Link>
-          </li>
-          <li>
-            <Link to="/protected">Protected Page</Link>
-          </li>
-        </ul>
-
-        <Switch>
-          <Route path="/public">
-            <div />
-          </Route>
-          <Route path="/login">
-            <div />
-          </Route>
-          <PrivateRoute path="/protected">
-            <div />
-          </PrivateRoute>
-        </Switch>
-      </div>
-    </Router>
+          <ul>
+            <li>
+              <Link to="/public">Public Page</Link>
+            </li>
+            <li>
+              <Link to="/protected">Protected Page</Link>
+            </li>
+          </ul>
+          <React.Suspense fallback={<div>Loading...</div>}>
+            <Switch>
+              <Route path="/public">
+                <div />
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <PrivateRoute path="/protected">
+                <div />
+              </PrivateRoute>
+            </Switch>
+          </React.Suspense>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 };
 
 // A wrapper for <Route> that redirects to the login
 // screen if you're not yet authenticated.
 const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
-  const isAuthenticated = false;
+  const session = useSession();
+
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        isAuthenticated ? (
+        session ? (
           children
         ) : (
           <Redirect
