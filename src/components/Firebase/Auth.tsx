@@ -2,7 +2,7 @@ import * as React from "react";
 import * as firebase from "firebase/app";
 import "firebase/auth";
 
-const authCtx = React.createContext(null);
+const authCtx = React.createContext<firebase.User | null>(null);
 
 const Auth: React.FC = ({ children }) => {
   const [authState, setAuthState] = React.useState<firebase.User | null>(
