@@ -8,7 +8,7 @@ import {
   RouteProps,
   Redirect
 } from "react-router-dom";
-import { AuthCheck, FirebaseAppProvider, useUser } from "reactfire";
+import { AuthCheck, FirebaseAppProvider, useUser, useAuth } from "reactfire";
 
 const AppProviders: React.FC = ({ children }) => {
   return (
@@ -64,9 +64,15 @@ export const App: React.FC = () => {
 };
 
 const ProtectedModule: React.FC = () => {
+  const auth = useAuth();
   const user: any = useUser();
 
-  return <div>{user && user.email}</div>;
+  return (
+    <>
+      <div>{user && user.email}</div>
+      <button onClick={() => auth.signOut()}>Logout</button>
+    </>
+  );
 };
 
 // A wrapper for <Route> that redirects to the login
