@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as firebase from "firebase/app";
 import "firebase/auth";
+
 import { authCtx } from "./ctx";
 
 const Auth: React.FC = ({ children }) => {

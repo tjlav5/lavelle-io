@@ -1,24 +1,33 @@
 import * as React from "react";
-import * as firebase from "firebase/app";
+// import * as firebase from "firebase/app";
+import { FirebaseApp } from "@firebase/app-types";
+import { firebaseCtx } from "./ctx";
 
-const firebaseCtx = React.createContext<null>(null);
+const importFirebase = () => {
+  const promises = [import(/* webpackChunkName: 'firebase' */ "firebase/app")];
+  return Promise.all(promises);
+};
 
 export const FirebaseProvider: React.FC = ({ children }) => {
-  const [app, setApp] = React.useState<any | null>(null);
+  const [app, setApp] = React.useState<FirebaseApp | null>(null);
 
-  if (!firebase.apps.length) {
-    setApp(
-      firebase.initializeApp({
-        apiKey: "AIzaSyB3Ttk-K5sVkJ0FL_lXJ4EflWKt6GEzSXw",
-        authDomain: "lavelle-io-1310.firebaseapp.com",
-        databaseURL: "https://lavelle-io-1310.firebaseio.com",
-        projectId: "lavelle-io-1310",
-        storageBucket: "lavelle-io-1310.appspot.com",
-        messagingSenderId: "431426547682",
-        appId: "1:431426547682:web:eceef6d0c486f4164c53bb"
-      })
-    );
-  }
+  React.useEffect(() => {
+    importFirebase().then(fbImports => {
+      console.log("loaded", fbImports);
+      const firebase = fbImports[0];
+      if (!firebase.apps.length) {
+        setApp((firebase.initializeApp({
+          apiKey: "AIzaSyB3Ttk-K5sVkJ0FL_lXJ4EflWKt6GEzSXw",
+          authDomain: "lavelle-io-1310.firebaseapp.com",
+          databaseURL: "https://lavelle-io-1310.firebaseio.com",
+          projectId: "lavelle-io-1310",
+          storageBucket: "lavelle-io-1310.appspot.com",
+          messagingSenderId: "431426547682",
+          appId: "1:431426547682:web:eceef6d0c486f4164c53bb"
+        }) as unknown) as FirebaseApp);
+      }
+    });
+  });
 
   return <firebaseCtx.Provider value={app}>{children}</firebaseCtx.Provider>;
 };

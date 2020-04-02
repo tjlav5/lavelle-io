@@ -1,11 +1,12 @@
 import * as React from "react";
-import * as firebase from "firebase/app";
 import { useLocation, Redirect } from "react-router-dom";
 import { useSession } from "../../components/Firebase/useSession";
+import { useFirebase } from "../../components/Firebase/useFirebase";
 
 export const Login: React.FC = () => {
   const location = useLocation();
   const session = useSession();
+  const firebase = useFirebase();
 
   const { from }: any = location.state || { from: { pathname: "/" } };
 
@@ -13,7 +14,7 @@ export const Login: React.FC = () => {
     return <Redirect to={from} />;
   }
 
-  return (
+  return firebase ? (
     <div>
       <button
         onClick={() => {
@@ -30,5 +31,7 @@ export const Login: React.FC = () => {
         Login
       </button>
     </div>
+  ) : (
+    <div>loading firebase</div>
   );
 };
