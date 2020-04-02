@@ -9,7 +9,7 @@ import {
   Redirect
 } from "react-router-dom";
 import { FirebaseProvider } from "./components/Firebase/Firebase";
-import { useSession } from "./components/Firebase/Auth";
+import { useSession } from "./components/Firebase/useSession";
 
 export const App: React.FC = () => {
   const Login = React.lazy(() => import("./modules/Login/index"));

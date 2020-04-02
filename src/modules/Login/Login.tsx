@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as firebase from "firebase/app";
 import { useLocation, Redirect } from "react-router-dom";
-import { useSession } from "../../components/Firebase/Auth";
+import { useSession } from "../../components/Firebase/useSession";
 
 export const Login: React.FC = () => {
   const location = useLocation();
