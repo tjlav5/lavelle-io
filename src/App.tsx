@@ -8,17 +8,16 @@ import {
   RouteProps,
   Redirect
 } from "react-router-dom";
-import { AuthProvider, useSession } from "./components/Auth/Auth";
+import { FirebaseProvider } from "./components/Firebase/Firebase";
+import { useSession } from "./components/Firebase/Auth";
 
 export const App: React.FC = () => {
   const Login = React.lazy(() => import("./modules/Login/index"));
 
   return (
-    <AuthProvider>
+    <FirebaseProvider>
       <Router>
         <div>
-          <button />
-
           <ul>
             <li>
               <Link to="/public">Public Page</Link>
@@ -30,19 +29,37 @@ export const App: React.FC = () => {
           <React.Suspense fallback={<div>Loading...</div>}>
             <Switch>
               <Route path="/public">
-                <div />
+                <div>PUBLIC</div>
               </Route>
-              <Route path="/login">
-                <Login />
-              </Route>
-              <PrivateRoute path="/protected">
-                <div />
-              </PrivateRoute>
+
+              <AuthenticatedRoute>
+                <Route path="/login">
+                  <Login />
+                </Route>
+                <PrivateRoute path="/protected">
+                  <ProtectedModule />
+                </PrivateRoute>
+              </AuthenticatedRoute>
             </Switch>
           </React.Suspense>
         </div>
       </Router>
-    </AuthProvider>
+    </FirebaseProvider>
+  );
+};
+
+const ProtectedModule: React.FC = () => {
+  const session: any = useSession()!;
+
+  return <div>{session.email}</div>;
+};
+
+const AuthenticatedRoute: React.FC = ({ children }) => {
+  const Auth = React.lazy(() => import("./components/Firebase/Auth"));
+  return (
+    <React.Suspense fallback={<div>Authenticating...</div>}>
+      <Auth>{children}</Auth>
+    </React.Suspense>
   );
 };
 
