@@ -8,14 +8,30 @@ import {
   RouteProps,
   Redirect
 } from "react-router-dom";
-import { FirebaseProvider } from "./components/Firebase/Firebase";
-import { useSession } from "./components/Firebase/useSession";
+import { AuthCheck, FirebaseAppProvider, useUser } from "reactfire";
+
+const AppProviders: React.FC = ({ children }) => {
+  return (
+    <FirebaseAppProvider
+      firebaseConfig={{
+        apiKey: "AIzaSyB3Ttk-K5sVkJ0FL_lXJ4EflWKt6GEzSXw",
+        authDomain: "lavelle-io-1310.firebaseapp.com",
+        databaseURL: "https://lavelle-io-1310.firebaseio.com",
+        projectId: "lavelle-io-1310",
+        storageBucket: "lavelle-io-1310.appspot.com",
+        messagingSenderId: "431426547682",
+        appId: "1:431426547682:web:eceef6d0c486f4164c53bb"
+      }}>
+      {children}
+    </FirebaseAppProvider>
+  );
+};
 
 export const App: React.FC = () => {
   const Login = React.lazy(() => import("./modules/Login/index"));
 
   return (
-    <FirebaseProvider>
+    <AppProviders>
       <Router>
         <div>
           <ul>
@@ -32,57 +48,46 @@ export const App: React.FC = () => {
                 <div>PUBLIC</div>
               </Route>
 
-              <AuthenticatedRoute>
-                <Route path="/login">
-                  <Login />
-                </Route>
-                <PrivateRoute path="/protected">
-                  <ProtectedModule />
-                </PrivateRoute>
-              </AuthenticatedRoute>
+              <Route path="/login">
+                <Login />
+              </Route>
+
+              <PrivateRoute path="/protected">
+                <ProtectedModule />
+              </PrivateRoute>
             </Switch>
           </React.Suspense>
         </div>
       </Router>
-    </FirebaseProvider>
+    </AppProviders>
   );
 };
 
 const ProtectedModule: React.FC = () => {
-  const session: any = useSession()!;
+  const user: any = useUser();
 
-  return <div>{session.email}</div>;
-};
-
-const AuthenticatedRoute: React.FC = ({ children }) => {
-  const Auth = React.lazy(() => import("./components/Firebase/Auth"));
-  return (
-    <React.Suspense fallback={<div>Authenticating...</div>}>
-      <Auth>{children}</Auth>
-    </React.Suspense>
-  );
+  return <div>{user && user.email}</div>;
 };
 
 // A wrapper for <Route> that redirects to the login
 // screen if you're not yet authenticated.
 const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
-  const session = useSession();
-
   return (
     <Route
       {...rest}
-      render={({ location }) =>
-        session ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: location }
-            }}
-          />
-        )
-      }
+      render={({ location }) => (
+        <AuthCheck
+          fallback={
+            <Redirect
+              to={{
+                pathname: "/login",
+                state: { from: location }
+              }}
+            />
+          }>
+          {children}
+        </AuthCheck>
+      )}
     />
   );
 };

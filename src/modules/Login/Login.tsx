@@ -1,15 +1,15 @@
 import * as React from "react";
-import * as firebase from "firebase/app";
 import { useLocation, Redirect } from "react-router-dom";
-import { useSession } from "../../components/Firebase/useSession";
+import { useAuth, useUser } from "reactfire";
 
 export const Login: React.FC = () => {
   const location = useLocation();
-  const session = useSession();
+  const auth = useAuth();
+  const user = useUser();
 
   const { from }: any = location.state || { from: { pathname: "/" } };
 
-  if (session) {
+  if (user) {
     return <Redirect to={from} />;
   }
 
@@ -17,15 +17,7 @@ export const Login: React.FC = () => {
     <div>
       <button
         onClick={() => {
-          firebase
-            .auth()
-            .createUserWithEmailAndPassword("tjlav5@gmail.com", "abc123")
-            .catch(function(error) {
-              // Handle Errors here.
-              console.log(error.code);
-              console.log(error.message);
-              // ...
-            });
+          auth.signInWithEmailAndPassword("tjlav5@gmail.com", "abc123");
         }}>
         Login
       </button>
