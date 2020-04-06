@@ -90,25 +90,9 @@ function NoMatch() {
 const ProtectedModule: React.FC = () => {
   const auth = useAuth();
   const user: any = useUser();
-
-  async function getContacts() {
-    const props = ["name", "email", "tel", "address", "icon"];
-    const opts = { multiple: true };
-
-    try {
-      const contacts = await navigator.contacts.select(props, opts);
-      // handleResults(contacts);
-      console.log(contacts);
-    } catch (ex) {
-      console.log(ex);
-      // Handle any errors here.
-    }
-  }
-
   return (
     <>
       <div>{user && user.email}</div>
-      <button onClick={() => getContacts()}>Contacts</button>
       <button onClick={() => auth.signOut()}>Logout</button>
     </>
   );
