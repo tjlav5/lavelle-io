@@ -6,7 +6,8 @@ import {
   Switch,
   Route,
   RouteProps,
-  Redirect
+  Redirect,
+  useLocation
 } from "react-router-dom";
 import { AuthCheck, FirebaseAppProvider, useUser, useAuth } from "reactfire";
 
@@ -36,6 +37,9 @@ export const App: React.FC = () => {
         <div>
           <ul>
             <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
               <Link to="/public">Public Page</Link>
             </li>
             <li>
@@ -44,6 +48,10 @@ export const App: React.FC = () => {
           </ul>
           <React.Suspense fallback={<div>Loading...</div>}>
             <Switch>
+              <Route exact path="/">
+                <div>HOME</div>
+              </Route>
+
               <Route path="/public">
                 <div>PUBLIC</div>
               </Route>
@@ -55,6 +63,10 @@ export const App: React.FC = () => {
               <PrivateRoute path="/protected">
                 <ProtectedModule />
               </PrivateRoute>
+
+              <Route path="*">
+                <NoMatch />
+              </Route>
             </Switch>
           </React.Suspense>
         </div>
@@ -63,13 +75,40 @@ export const App: React.FC = () => {
   );
 };
 
+function NoMatch() {
+  let location = useLocation();
+
+  return (
+    <div>
+      <h3>
+        No match for <code>{location.pathname}</code>
+      </h3>
+    </div>
+  );
+}
+
 const ProtectedModule: React.FC = () => {
   const auth = useAuth();
   const user: any = useUser();
 
+  async function getContacts() {
+    const props = ["name", "email", "tel", "address", "icon"];
+    const opts = { multiple: true };
+
+    try {
+      const contacts = await navigator.contacts.select(props, opts);
+      // handleResults(contacts);
+      console.log(contacts);
+    } catch (ex) {
+      console.log(ex);
+      // Handle any errors here.
+    }
+  }
+
   return (
     <>
       <div>{user && user.email}</div>
+      <button onClick={() => getContacts()}>Contacts</button>
       <button onClick={() => auth.signOut()}>Logout</button>
     </>
   );
