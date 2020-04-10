@@ -4,6 +4,8 @@ import { useMessaging } from "reactfire";
 export const MessageMe: React.FC = () => {
   const messaging = useMessaging();
   const [token, setToken] = React.useState("");
+  const [message, setMessage] = React.useState("");
+
   try {
     messaging.usePublicVapidKey(
       "BIjM8Qxoxk9ztC1cXOto4o5P9hUhY9VSLGWnVBBKO3R03nDLG9iWUjuAyy9X_BBHtfuVbBONUcsl7r46A5qx_wU"
@@ -12,7 +14,7 @@ export const MessageMe: React.FC = () => {
     console.log({ e });
   }
 
-  console.log({ messaging });
+  // console.log({ messaging });
 
   messaging
     .getToken()
@@ -59,6 +61,7 @@ export const MessageMe: React.FC = () => {
 
   messaging.onMessage(payload => {
     console.log("Message received. ", payload);
+    setMessage(JSON.stringify(payload));
     // ...
   });
 
@@ -66,6 +69,8 @@ export const MessageMe: React.FC = () => {
     <div>
       <p>Messaging Token</p>
       <p>{token}</p>
+      <p>Message</p>
+      <p>{message}</p>
     </div>
   );
 };
