@@ -30,6 +30,7 @@ const AppProviders: React.FC = ({ children }) => {
 
 export const App: React.FC = () => {
   const Login = React.lazy(() => import("./modules/Login/index"));
+  const MessageMe = React.lazy(() => import("./modules/MessageMe/index"));
 
   return (
     <AppProviders>
@@ -43,6 +44,9 @@ export const App: React.FC = () => {
               <Link to="/public">Public Page</Link>
             </li>
             <li>
+              <Link to="/messageMe">Message Me</Link>
+            </li>
+            <li>
               <Link to="/protected">Protected Page</Link>
             </li>
           </ul>
@@ -54,6 +58,10 @@ export const App: React.FC = () => {
 
               <Route path="/public">
                 <div>PUBLIC</div>
+              </Route>
+
+              <Route path="/messageMe">
+                <MessageMe />
               </Route>
 
               <Route path="/login">
