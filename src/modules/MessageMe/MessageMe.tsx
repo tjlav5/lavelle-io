@@ -1,12 +1,6 @@
 import * as React from "react";
 import { useMessaging } from "reactfire";
 
-function useMessagingFoo() {
-  const messaging = useMessaging();
-
-  return messaging;
-}
-
 export const MessageMe: React.FC = () => {
   const messaging = useMessaging();
   const [token, setToken] = React.useState("");
