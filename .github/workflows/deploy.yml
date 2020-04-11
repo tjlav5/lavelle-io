@@ -18,7 +18,7 @@ jobs:
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
-          name: site
+          name: build
           path: build
   build-functions:
     name: Build Functions
@@ -47,7 +47,7 @@ jobs:
       - name: Download Site Artifact
         uses: actions/download-artifact@master
         with:
-          name: site
+          name: build
       - name: Download Functions Artifact
         uses: actions/download-artifact@master
         with:
