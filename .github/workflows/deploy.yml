@@ -26,15 +26,19 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
+      - name: cd into Functions
+        run: cd functions
       - name: Install Dependencies
-        run: npm --prefix functions install
+        run: npm install
       - name: Build
-        run: npm --prefix functions run build
+        run: npm run build
+      - name: cd root
+        run: cd ..
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
           name: functions
-          path: functions/lib/
+          path: functions/
   deploy:
     name: Deploy
     needs: [build-site, build-functions]
