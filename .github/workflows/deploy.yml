@@ -32,8 +32,14 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
+      - name: test-ls
+        run: ls
+      - name: test-pwd
+        run: pwd
       - name: cd root
         run: cd ..
+      - name: test-pwd
+        run: pwd
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
