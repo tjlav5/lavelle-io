@@ -26,20 +26,12 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
-      - name: cd into Functions
-        run: cd functions
       - name: Install Dependencies
         run: npm install
+        working-directory: ./functions
       - name: Build
         run: npm run build
-      - name: test-ls
-        run: ls
-      - name: test-pwd
-        run: pwd
-      - name: cd root
-        run: cd ..
-      - name: test-pwd
-        run: pwd
+        working-directory: ./functions
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
