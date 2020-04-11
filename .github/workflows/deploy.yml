@@ -31,16 +31,17 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: build
-#       - name: Deploy to Firebase
-#         uses: w9jds/firebase-action@master
-#         with:
-#           args: deploy --only hosting
-#         env:
-#           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      - name: Firebase GitHub Action
-        uses: pizzafox/firebase-action@1.0.7
-        env:
-          PROJECT_ID: "lavelle-io-1310"
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
         with:
-          args: deploy
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: "lavelle-io-1310"
+#       - name: Firebase GitHub Action
+#         uses: pizzafox/firebase-action@1.0.7
+#         env:
+#           PROJECT_ID: "lavelle-io-1310"
+#           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+#         with:
+#           args: deploy
