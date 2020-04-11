@@ -5,8 +5,8 @@ on:
       - master
 
 jobs:
-  build:
-    name: Build
+  build-site:
+    name: Build Site
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -18,19 +18,38 @@ jobs:
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
-          name: build
+          name: site
           path: build
-  deploy:
-    name: Deploy
-    needs: build
+  build-functions:
+    name: Build Functions
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
-      - name: Download Artifact
+      - name: Install Dependencies
+        run: npm --prefix functions install
+      - name: Build
+        run: npm --prefix functions build
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: functions
+          path: functions/lib/
+  deploy:
+    name: Deploy
+    needs: build-site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Site Artifact
         uses: actions/download-artifact@master
         with:
-          name: build
+          name: site
+      - name: Download Functions Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: functions
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
