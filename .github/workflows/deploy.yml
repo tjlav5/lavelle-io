@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: functions
-          path: functions/
+          path: functions
   deploy:
     name: Deploy
     needs: [build-site, build-functions]
