@@ -37,7 +37,7 @@ jobs:
           path: functions/lib/
   deploy:
     name: Deploy
-    needs: build-site
+    needs: [build-site, build-functions]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
