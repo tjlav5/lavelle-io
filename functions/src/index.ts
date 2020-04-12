@@ -1,5 +1,5 @@
 import * as functions from "firebase-functions";
-import { foobar } from "foobar";
+import { foobar } from "./foobar";
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
