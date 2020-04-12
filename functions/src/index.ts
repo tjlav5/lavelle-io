@@ -8,4 +8,4 @@ export const helloWorld = functions.https.onRequest((request, response) => {
   response.send("Hello from Firebase!");
 });
 
-exports.foobar = functions.https.onRequest(foobar);
+exports.foobar = functions.https.onCall(foobar);

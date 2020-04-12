@@ -1,3 +1,3 @@
-export function foobar(request: any, response: any) {
-  response.send("Hello from foobar!");
+export function foobar(data: any, context: any) {
+  return { foo: "bar" };
 }
