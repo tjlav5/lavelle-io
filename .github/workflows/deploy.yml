@@ -48,11 +48,11 @@ jobs:
         working-directory: ./functions
       - uses: actions/upload-artifact@v2-preview
         with:
-          name: functions
+          name: functions-lib
           path: functions/lib/
       - uses: actions/upload-artifact@v2-preview
         with:
-          name: functions
+          name: functions-pkg
           path: functions/package.json
 #       - name: Archive Production Artifact
 #         uses: actions/upload-artifact@master
@@ -81,10 +81,20 @@ jobs:
         with:
           name: site
           path: build
+#       - name: Download Functions Artifact
+#         uses: actions/download-artifact@master
+#         with:
+#           name: functions
       - name: Download Functions Artifact
         uses: actions/download-artifact@master
         with:
-          name: functions
+          name: functions-lib
+          path: functions/lib
+      - name: Download Functions Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: functions-pkg
+          path: functions
       - name: foo
         run: ls
       - name: foo
