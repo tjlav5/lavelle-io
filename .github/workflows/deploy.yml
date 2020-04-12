@@ -70,10 +70,14 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: firebase.json
+          path: ./
       - name: Download Firebase Artifact
         uses: actions/download-artifact@master
         with:
           name: .firebaserc
+          path: ./
+      - name: foo
+        run: ls
       - name: Download Site Artifact
         uses: actions/download-artifact@master
         with:
