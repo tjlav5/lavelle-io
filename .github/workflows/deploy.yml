@@ -5,8 +5,22 @@ on:
       - master
 
 jobs:
-  build:
-    name: Build
+  build-firebase:
+    name: Build Firebase
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - uses: actions/upload-artifact@v2-preview
+        with:
+          name: firebase
+          path: firebase.json
+      - uses: actions/upload-artifact@v2-preview
+        with:
+          name: firebase
+          path: .firebaserc
+  build-site:
+    name: Build Site
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -18,29 +32,83 @@ jobs:
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
-          name: build
+          name: site
           path: build
-  deploy:
-    name: Deploy
-    needs: build
+  build-functions:
+    name: Build Functions
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
-      - name: Download Artifact
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ./functions
+      - name: Build
+        run: npm run build
+        working-directory: ./functions
+      - uses: actions/upload-artifact@v2-preview
+        with:
+          name: functions-lib
+          path: functions/lib/
+      - uses: actions/upload-artifact@v2-preview
+        with:
+          name: functions-pkg
+          path: functions/package.json
+      - uses: actions/upload-artifact@v2-preview
+        with:
+          name: functions-pkg
+          path: functions/package-lock.json
+#       - name: Archive Production Artifact
+#         uses: actions/upload-artifact@master
+#         with:
+#           name: functions
+#           path: functions
+  deploy:
+    name: Deploy
+    needs: [build-firebase, build-site, build-functions]
+    runs-on: ubuntu-latest
+    steps:
+#       - name: Checkout Repo
+#         uses: actions/checkout@master
+      - name: Download Firebase Artifact
         uses: actions/download-artifact@master
         with:
-          name: build
-#       - name: Deploy to Firebase
-#         uses: w9jds/firebase-action@master
+          name: firebase
+          path: ./
+#       - name: Download Firebase Artifact
+#         uses: actions/download-artifact@master
 #         with:
-#           args: deploy --only hosting
-#         env:
-#           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      - name: Firebase GitHub Action
-        uses: pizzafox/firebase-action@1.0.7
-        env:
-          PROJECT_ID: "lavelle-io-1310"
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+#           name: .firebaserc
+#           path: ./
+      - name: Download Site Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: site
+          path: build
+#       - name: Download Functions Artifact
+#         uses: actions/download-artifact@master
+#         with:
+#           name: functions
+      - name: Download Functions Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: functions-lib
+          path: functions/lib
+      - name: Download Functions Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: functions-pkg
+          path: functions
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ./functions
+      - name: foo
+        run: ls
+      - name: foo
+        run: ls functions
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
         with:
           args: deploy
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

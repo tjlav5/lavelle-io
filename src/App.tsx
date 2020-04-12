@@ -29,8 +29,9 @@ const AppProviders: React.FC = ({ children }) => {
 };
 
 export const App: React.FC = () => {
-  const Login = React.lazy(() => import("./modules/Login/index"));
-  const MessageMe = React.lazy(() => import("./modules/MessageMe/index"));
+  const Login = React.lazy(() => import("./modules/Login"));
+  const MessageMe = React.lazy(() => import("./modules/MessageMe"));
+  const Fetcher = React.lazy(() => import("./modules/Fetcher"));
 
   return (
     <AppProviders>
@@ -45,6 +46,9 @@ export const App: React.FC = () => {
             </li>
             <li>
               <Link to="/messageMe">Message Me</Link>
+            </li>
+            <li>
+              <Link to="/fetch">Fetch</Link>
             </li>
             <li>
               <Link to="/protected">Protected Page</Link>
@@ -62,6 +66,10 @@ export const App: React.FC = () => {
 
               <Route path="/messageMe">
                 <MessageMe />
+              </Route>
+
+              <Route path="/fetch">
+                <Fetcher />
               </Route>
 
               <Route path="/login">
