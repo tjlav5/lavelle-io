@@ -13,11 +13,11 @@ jobs:
         uses: actions/checkout@master
       - uses: actions/upload-artifact@v2-preview
         with:
-          name: firebase.json
+          name: firebase
           path: firebase.json
       - uses: actions/upload-artifact@v2-preview
         with:
-          name: .firebaserc
+          name: firebase
           path: .firebaserc
   build-site:
     name: Build Site
@@ -69,15 +69,13 @@ jobs:
       - name: Download Firebase Artifact
         uses: actions/download-artifact@master
         with:
-          name: firebase.json
+          name: firebase
           path: ./
-      - name: Download Firebase Artifact
-        uses: actions/download-artifact@master
-        with:
-          name: .firebaserc
-          path: ./
-      - name: foo
-        run: ls
+#       - name: Download Firebase Artifact
+#         uses: actions/download-artifact@master
+#         with:
+#           name: .firebaserc
+#           path: ./
       - name: Download Site Artifact
         uses: actions/download-artifact@master
         with:
@@ -86,6 +84,10 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: functions
+      - name: foo
+        run: ls
+      - name: foo
+        run: ls functions
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
