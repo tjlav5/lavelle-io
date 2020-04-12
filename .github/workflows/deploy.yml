@@ -54,6 +54,10 @@ jobs:
         with:
           name: functions-pkg
           path: functions/package.json
+      - uses: actions/upload-artifact@v2-preview
+        with:
+          name: functions-pkg
+          path: functions/package-lock.json
 #       - name: Archive Production Artifact
 #         uses: actions/upload-artifact@master
 #         with:
@@ -95,6 +99,9 @@ jobs:
         with:
           name: functions-pkg
           path: functions
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ./functions
       - name: foo
         run: ls
       - name: foo
