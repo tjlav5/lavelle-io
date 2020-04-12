@@ -13,11 +13,11 @@ jobs:
         uses: actions/checkout@master
       - uses: actions/upload-artifact@v2-preview
         with:
-          name: firebase
+          name: firebase.json
           path: firebase.json
       - uses: actions/upload-artifact@v2-preview
         with:
-          name: firebase
+          name: .firebaserc
           path: .firebaserc
   build-site:
     name: Build Site
@@ -49,7 +49,7 @@ jobs:
       - uses: actions/upload-artifact@v2-preview
         with:
           name: functions
-          path: functions/lib/**
+          path: functions/lib
       - uses: actions/upload-artifact@v2-preview
         with:
           name: functions
@@ -64,12 +64,16 @@ jobs:
     needs: [build-firebase, build-site, build-functions]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
+#       - name: Checkout Repo
+#         uses: actions/checkout@master
       - name: Download Firebase Artifact
         uses: actions/download-artifact@master
         with:
-          name: build
+          name: firebase.json
+      - name: Download Firebase Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: .firebaserc
       - name: Download Site Artifact
         uses: actions/download-artifact@master
         with:
