@@ -3,7 +3,7 @@ import { useCallable } from "../../components/functions/useCallable";
 import {
   FoobarRequest,
   FoobarResponse
-} from "../../../functions/messages/foobar";
+} from "../../../functions/src/messages/foobar";
 
 export const Fetcher: React.FC = () => {
   const foobar = useCallable<FoobarRequest, FoobarResponse>("foobar");
