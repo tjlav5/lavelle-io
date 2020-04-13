@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useMessaging } from "reactfire";
 
-import { useInstallationId } from "../../components/analytics/useInstallationId";
-import { useToken } from "../../components/notification/useNotification";
+import { useInstallationId } from "src/components/analytics/useInstallationId";
+import { useToken } from "src/components/notification/useNotification";
 
 export const MessageMe: React.FC = () => {
   const messaging = useMessaging();

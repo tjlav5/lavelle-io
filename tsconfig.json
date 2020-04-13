@@ -1,9 +1,10 @@
 {
     "include": [
-        "./src/*"
+        "src"
     ],
     "compilerOptions": {
         "strict": true,
+        "baseUrl": "./",
         "lib": [
             "dom",
             "es2015"
